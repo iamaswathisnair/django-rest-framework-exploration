@@ -4,6 +4,7 @@ from . serializers import StudentSerializer
 from rest_framework.renderers import JSONRenderer
 from django.http import JsonResponse
 from django.http import HttpResponse
+from rest_framework.parsers import JSONParser
 
 # Create your views here.
 
@@ -24,3 +25,23 @@ def all_student(request):
     
     # Return the serialized data as JSON response
     return JsonResponse(serializer.data, safe=False)
+
+# safe=True: Only dictionaries are allowed. This is safer and follows typical JSON response practices.
+# safe=False: Allows returning non-dictionaries. Use it carefully, especially if the client expects a specific data format.
+
+
+
+def create_student(request):
+    if request.method == 'POST':
+        
+        # Deserialize the incoming JSON data
+        data = JSONParser().parse(request)  # Convert the incoming JSON into a Python dictionary
+        
+        
+        # Use the serializer to check and validate the data
+        serializer = StudentSerializer(data=data)
+
+        if serializer.is_valid():  # Check if the data is valid according to the model fields
+            serializer.save()  # Save the new student to the database
+            return JsonResponse(serializer.data, status=201)  # Return the serialized data of the newly created student
+        return JsonResponse(serializer.errors, status=400)  # If data is invalid, return errors
