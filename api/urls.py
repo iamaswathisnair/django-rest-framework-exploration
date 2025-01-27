@@ -1,19 +1,3 @@
-"""
-URL configuration for studybud project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/4.2/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 
 # from django.conf import settings
 # from django.conf.urls.static import static
@@ -25,5 +9,13 @@ from . import views
 urlpatterns = [
     path('student-details/', views.student_details, name='student-details'),
     path('all_student/', views.all_student, name='all_student'),
+    
+  
+    path('students/', views.student_list, name='student_list'),  # GET all students
+    path('students/<int:pk>/', views.student_detail, name='student_detail'),  # GET single student
+    path('students/create/', views.student_create, name='student_create'),  # POST new student
+    path('students/update/<int:pk>/', views.student_update, name='student_update'),  # PUT full update
+    path('students/partial-update/<int:pk>/', views.student_partial_update, name='student_partial_update'),  # PATCH partial update
+    path('students/delete/<int:pk>/', views.student_delete, name='student_delete'),  # DELETE student
     
 ]

@@ -8,8 +8,6 @@ class StudentSerializer(serializers.Serializer):
      id =serializers.IntegerField()
      
      
-     
-     
 # class StudentSerializer(serializers.ModelSerializer):
 #     class Meta:
 #         model = Student

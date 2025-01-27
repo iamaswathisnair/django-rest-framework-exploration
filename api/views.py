@@ -4,7 +4,9 @@ from . serializers import StudentSerializer
 from rest_framework.renderers import JSONRenderer
 from django.http import JsonResponse
 from django.http import HttpResponse
-from rest_framework.parsers import JSONParser
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
 
 # Create your views here.
 
@@ -31,17 +33,94 @@ def all_student(request):
 
 
 
-def create_student(request):
-    if request.method == 'POST':
-        
-        # Deserialize the incoming JSON data
-        data = JSONParser().parse(request)  # Convert the incoming JSON into a Python dictionary
-        
-        
-        # Use the serializer to check and validate the data
-        serializer = StudentSerializer(data=data)
 
-        if serializer.is_valid():  # Check if the data is valid according to the model fields
-            serializer.save()  # Save the new student to the database
-            return JsonResponse(serializer.data, status=201)  # Return the serialized data of the newly created student
-        return JsonResponse(serializer.errors, status=400)  # If data is invalid, return errors
+
+
+                                        # crud operations using fbv
+
+# Retrieve All Students or a Single Student
+
+@api_view(['GET'])
+def student_list(request):
+    if request.method == 'GET':
+        students = Student.objects.all()  # Fetch all student records
+        serializer = StudentSerializer(students, many=True)  # Serialize multiple objects
+        return Response(serializer.data)  # Return JSON response
+   
+    
+# For a single student:
+
+@api_view(['GET'])
+def student_detail(request, pk):
+    try:
+        student = Student.objects.get(pk=pk)  # Fetch student by primary key (id)
+    except Student.DoesNotExist:
+        return Response({'error': 'Student not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    serializer = StudentSerializer(student)  # Serialize a single object
+    return Response(serializer.data)  # Return JSON response
+
+
+# Create a New Student
+
+@api_view(['POST'])
+def student_create(request):
+    if request.method == 'POST':
+        serializer = StudentSerializer(data=request.data)  # Deserialize incoming JSON
+        if serializer.is_valid():  # Validate data
+            student = Student.objects.create(**serializer.validated_data)  # Save to DB
+            return Response(StudentSerializer(student).data, status=status.HTTP_201_CREATED)  # Return saved data
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)  # Return errors if invalid
+    
+    
+    
+
+# Update an Existing Student
+@api_view(['PUT'])
+def student_update(request, pk):
+    try:
+        student = Student.objects.get(pk=pk)  # Fetch student by primary key
+    except Student.DoesNotExist:
+        return Response({'error': 'Student not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'PUT':
+        serializer = StudentSerializer(student, data=request.data)  # Deserialize JSON and include existing data
+        if serializer.is_valid():
+            student.name = serializer.validated_data['name']
+            student.roll = serializer.validated_data['roll']
+            student.city = serializer.validated_data['city']
+            student.save()  # Save updated data to the database
+            return Response(serializer.data)  # Return updated student data
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)  # Return errors if invalid
+
+
+
+# Partially Update an Existing Student (Partial Update)
+
+@api_view(['PATCH'])
+def student_partial_update(request, pk):
+    try:
+        student = Student.objects.get(pk=pk)  # Fetch student by primary key
+    except Student.DoesNotExist:
+        return Response({'error': 'Student not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'PATCH':
+        serializer = StudentSerializer(student, data=request.data, partial=True)  # Allow partial updates
+        if serializer.is_valid():
+            serializer.save()  # Save the changes to the database
+            return Response(serializer.data)  # Return updated student data
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)  # Return errors if invalid
+    
+
+# Delete a Student
+
+@api_view(['DELETE'])
+def student_delete(request, pk):
+    try:
+        student = Student.objects.get(pk=pk)  # Fetch student by primary key
+    except Student.DoesNotExist:
+        return Response({'error': 'Student not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'DELETE':
+        student.delete()  # Delete the student from the database
+        return Response({'message': 'Student deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
