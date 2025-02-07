@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'api',
     'api_v2',
+    'api_cbvs',
     
 ]
 
