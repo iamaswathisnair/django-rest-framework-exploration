@@ -7,6 +7,7 @@ from django.http import HttpResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
+import json
 
 # Create your views here.
 
@@ -15,6 +16,19 @@ def student_details(request):
     serializer = StudentSerializer(stu)   #Serializing the Student Object , Serializers convert Python objects into dictionary format, which is closer to JSON.
     json_data = JSONRenderer().render(serializer.data) #SONRenderer converts the dictionary into a JSON string.
     return HttpResponse(json_data , content_type ='application/json') #Sends the JSON string to the client. The content_type='application/json' tells the client (like a browser or app) that the response contains JSON data.
+# Use httpresponse When manually setting the response type (content_type="text/html" or content_type="application/json")
+# Httpresponse By default, it sends HTML, but we can make it send JSON by specifying content_type='application/json'.
+
+def hello_world(request):
+    data = {"message": "Hello, world!"}
+    json_data = json.dumps(data)  # Convert Python dictionary to JSON string
+    return HttpResponse(json_data, content_type="application/json")
+
+
+#above same concept using jsonrespinse 
+
+def hello_world(request):
+    return JsonResponse({"message": "Hello, world!"})
 
 #for getting all data 
 
@@ -30,13 +44,13 @@ def all_student(request):
 
 # safe=True: Only dictionaries are allowed. This is safer and follows typical JSON response practices.
 # safe=False: Allows returning non-dictionaries. Use it carefully, especially if the client expects a specific data format.
+# Handles safe=True by default, preventing errors when returning non-dictionary data.If you want to return a list, you must use safe=False:
 
 
 
 
 
-
-                                        # crud operations using fbv
+                                    # crud operations using fbv
 
 # Retrieve All Students or a Single Student
 

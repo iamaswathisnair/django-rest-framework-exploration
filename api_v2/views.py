@@ -26,7 +26,7 @@ def teacher_list(request):
         if serializer.is_valid():
             serializer.save()  # Save data to the database
             return Response(serializer.data, status=201)
-        return Response(serializer.errors, status=400)
+        return Response(serializer.errors, status=400)   #error handling musttt brooo 
 
 
 # Get a Single Teacher by ID
