@@ -14,7 +14,21 @@ class BookAPIView(APIView):
         books = Book.objects.all()   # Get ALL books 📚
         serializer = BookSerializer(books, many=True)
         return Response(serializer.data)
+    
+    #When The get Method is Called
+    # Django calls:
+    
+    #book_view = BookAPIView()   # Creates an instance (self)
+    #response = book_view.get(request)   # Calls the method
+    
+    """book_view = BookAPIView()   # 🔥 Creates an instance (object) of the class
+    response = book_view.get(request)   # 🔥 Calls the 'get' method on that instance"""
+    
+    # BookAPIView.get(self=book_view, request=request)
+    #So, self is the instance of the class (book_view), and request is the incoming HTTP request.
 
+
+    
     def post(self, request):
         serializer = BookSerializer(data=request.data)   # Create a new book 🆕
         if serializer.is_valid():
@@ -23,8 +37,11 @@ class BookAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
             
-#-----------------------------------------#
+#---------------------------------------------------------------------------------------------------------------#
+
+
 class BookDetailAPIView(APIView):
+    
     def get(self, request, pk):
         book = get_object_or_404(Book, pk=pk)  # Get ONE book by ID
         serializer = BookSerializer(book)
@@ -38,6 +55,7 @@ class BookDetailAPIView(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
     def patch(self, request, pk):
         book = get_object_or_404(Book, pk=pk)  # Partially update ONE book
         serializer = BookSerializer(book, data=request.data, partial=True)
@@ -45,6 +63,7 @@ class BookDetailAPIView(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
     def delete(self, request, pk):
         book = get_object_or_404(Book, pk=pk)  # Delete ONE book by ID

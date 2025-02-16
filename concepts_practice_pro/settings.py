@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'api',
     'api_v2',
     'api_cbvs',
+    'api_generic',
     
 ]
 
