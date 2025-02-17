@@ -1,12 +1,10 @@
 # GenericApiView and model mixins
 
-
 from django.shortcuts import render
 from . models import Restaurant
 from . serializers import RestaurantSerializer
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import ListModelMixin , CreateModelMixin , UpdateModelMixin , RetrieveModelMixin , DestroyModelMixin
-
 
 class RestaurantListCreateAPI(GenericAPIView ,ListModelMixin , CreateModelMixin):
     queryset = Restaurant.objects.all()  # 1. Fetch all restaurants
@@ -37,3 +35,23 @@ class RestaurantDetailAPI(GenericAPIView, RetrieveModelMixin, UpdateModelMixin, 
 
     def delete(self, request, pk):
         return self.destroy(request, pk)  # ✅ Handles DELETE request (Delete restaurant)
+    
+    
+    
+    
+    
+# class RestaurantDetailAPI(GenericAPIView, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin, PartialUpdateModelMixin):
+#     queryset = Restaurant.objects.all()
+#     serializer_class = RestaurantSerializer
+
+#     def get(self, request, pk):
+#         return self.retrieve(request, pk)
+
+#     def put(self, request, pk):
+#         return self.update(request, pk)  # ✅ Full Update
+
+#     def patch(self, request, pk):
+#         return self.partial_update(request, pk)  # ✅ Partial Update
+
+#     def delete(self, request, pk):
+#         return self.destroy(request, pk)
