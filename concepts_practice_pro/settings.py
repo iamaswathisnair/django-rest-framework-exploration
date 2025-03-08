@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'api_cbvs',
     'api_generic',
     'generic_prebuilt',
+    'basic_viewset',
+    'modelviewset_app',
     
 ]
 

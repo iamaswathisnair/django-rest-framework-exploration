@@ -1,3 +1,8 @@
+# Using Fully Built Generic Views
+# Instead of writing Mixins, we can directly use DRF’s Generic Views.
+
+# 🔥 Replacing RestaurantListCreateAPI with ListCreateAPIView
+
 from .models import Movie
 from .serializers import MovieSerializer
 
