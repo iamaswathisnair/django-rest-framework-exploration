@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'api_generic',
     'generic_prebuilt',
     'basic_viewset',
-    'modelviewset_app',
+    'api_modelviewset',
+    'api_ReadOnlyModelViewSet',
     
 ]
 
