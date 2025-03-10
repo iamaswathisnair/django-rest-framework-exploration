@@ -9,6 +9,10 @@ from rest_framework.response import Response
 from rest_framework import status
 import json
 
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.authentication import BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
+
 # Create your views here.
 
 def student_details(request):
@@ -55,6 +59,8 @@ def all_student(request):
 # Retrieve All Students or a Single Student
 
 @api_view(['GET'])
+@authentication_classes([BasicAuthentication])
+@permission_classes([IsAuthenticated])
 def student_list(request):
     if request.method == 'GET':
         students = Student.objects.all()  # Fetch all student records
@@ -65,6 +71,8 @@ def student_list(request):
 # For a single student:
 
 @api_view(['GET'])
+@authentication_classes([BasicAuthentication])
+@permission_classes([IsAuthenticated])
 def student_detail(request, pk):
     try:
         student = Student.objects.get(pk=pk)  # Fetch student by primary key (id)
@@ -78,6 +86,8 @@ def student_detail(request, pk):
 # Create a New Student
 
 @api_view(['POST'])
+@authentication_classes([BasicAuthentication])
+@permission_classes([IsAuthenticated])
 def student_create(request):
     if request.method == 'POST':
         serializer = StudentSerializer(data=request.data)  # Deserialize incoming JSON
@@ -91,6 +101,8 @@ def student_create(request):
 
 # Update an Existing Student
 @api_view(['PUT'])
+@authentication_classes([BasicAuthentication])
+@permission_classes([IsAuthenticated])
 def student_update(request, pk):
     try:
         student = Student.objects.get(pk=pk)  # Fetch student by primary key
@@ -112,6 +124,8 @@ def student_update(request, pk):
 # Partially Update an Existing Student (Partial Update)
 
 @api_view(['PATCH'])
+@authentication_classes([BasicAuthentication])
+@permission_classes([IsAuthenticated])
 def student_partial_update(request, pk):
     try:
         student = Student.objects.get(pk=pk)  # Fetch student by primary key
@@ -129,6 +143,8 @@ def student_partial_update(request, pk):
 # Delete a Student
 
 @api_view(['DELETE'])
+@authentication_classes([BasicAuthentication])
+@permission_classes([IsAuthenticated])
 def student_delete(request, pk):
     try:
         student = Student.objects.get(pk=pk)  # Fetch student by primary key
