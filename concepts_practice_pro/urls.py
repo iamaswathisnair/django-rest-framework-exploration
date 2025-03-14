@@ -11,7 +11,7 @@ urlpatterns = [
     path('api/v3/',   include('api_cbvs.urls')  ),
     path('api/v4/' ,    include('api_generic.urls') ),
     path('api/v5/' ,      include('generic_prebuilt.urls') ),
-    path('api/v5/' ,        include('basic_viewset.urls') ),
+    path('api/v6/' ,        include('basic_viewset.urls') ),
 
   
 ]

@@ -4,12 +4,18 @@ from .models import Book
 from  . serializers import BookSerializer
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.authentication import SessionAuthentication
+from rest_framework.permissions import IsAuthenticated
+
 
 
 
 # Create your views here.
 
 class BookAPIView(APIView):
+    authentication_classes = [SessionAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
         books = Book.objects.all()   # Get ALL books 📚
         serializer = BookSerializer(books, many=True)
@@ -41,6 +47,9 @@ class BookAPIView(APIView):
 
 
 class BookDetailAPIView(APIView):
+    authentication_classes = [SessionAuthentication]
+    permission_classes = [IsAuthenticated]
+
     
     def get(self, request, pk):
         book = get_object_or_404(Book, pk=pk)  # Get ONE book by ID

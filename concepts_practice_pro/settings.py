@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'basic_viewset',
     'api_modelviewset',
     'api_ReadOnlyModelViewSet',
+    'rest_framework.authtoken',
     
 ]
 
